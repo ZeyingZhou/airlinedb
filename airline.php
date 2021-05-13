@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<title>Airlinedb</title>
+<title>AirlineDB</title>
 </head>
 <style>
 table {
