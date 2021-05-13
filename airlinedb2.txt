@@ -1,0 +1,107 @@
+drop database airlineDB;
+create database airlinedb;
+
+create table Airport(
+code char(3) not null primary key,
+name varchar(200),
+city varchar(100),
+province char(2));
+
+
+create table AirplaneType(
+name varchar(100) not null primary key,
+maxSeats integer,
+company varchar(100));
+
+create table Airline(
+code char(5) not null primary key,
+name varchar(100));
+
+create table Airplane(
+id char(10) not null primary key,
+owner char(5) not null,
+year integer,
+type varchar(100) not null,
+foreign key (owner) references Airline(code) on delete cascade,
+foreign key (type) references AirplaneType(name));
+
+create table Flight(
+airlineCode char(5) not null,
+flightCode integer not null,
+departureScheduledTime time,
+departureActualTime time,
+arrivalScheduledTime time,
+arrivalActualTime time,
+departureAirport char(3) not null,
+arrivalAirport char(3) not null,
+airplane char(10) not null,
+primary key(airlineCode, flightCode),
+foreign key (arrivalAirport) references Airport (code) on delete cascade,
+foreign key (departureAirport) references Airport (code) on delete cascade,
+foreign key (airplane) references Airplane(id) on delete restrict,
+foreign key (airlineCode) references Airline(code) on delete cascade);
+
+create table Handles(
+airportCode char(3) not null,
+aircraftType varchar(100) not null,
+primary key(airportCode, aircraftType),
+foreign key (airportCode) references Airport(code) on delete cascade,
+foreign key (aircraftType) references AirplaneType (name) on delete cascade);
+
+create table DaysOffered(
+airlineCode char(5) not null,
+flightCode integer not null,
+day char(9) not null,
+primary key(airlineCode, flightCode, day),
+foreign key (airlineCode, flightCode) references Flight(airlineCode, flightCode) on delete cascade);
+
+insert into Airport values
+('100','Justin Airport','Ottawa','ON'),
+('103','Western Airport','Brampton','ON'),
+('107','Capital Airport','Kingston','ON'),
+('104','JTech Airport','Waterloo','ON')
+;
+
+insert into AirplaneType values
+('Warrior',200,'Cisco'),
+('Sniper',350,'DK'),
+('Knight',1500,'FlighTech')
+;
+
+insert into Airline values
+('5A7QR','Queens'),
+('19B34','Western'),
+('2X3F4','Waterloo'),
+('2O4E2','Westjet')
+;
+
+
+insert into Airplane values
+('00001','5A7QR',1999,'Warrior'),
+('00002','19B34',2002,'Sniper'),
+('00003','2X3F4',2003,'Knight')
+;
+
+insert into Flight values
+('5A7QR','13456','12:50:00','13:00:00','15:00:00','15:20:00','104','107','00001'),
+('19B34','25522','10:30:00','10:40:00','12:50:00','12:55:00','103','104','00002'),
+('2X3F4','55777','08:20:00','08:40:00','11:00:00','11:20:00','104','100','00003'),
+('2O4E2','14233','03:20:00','03:30:00','7:00:00','7:20:00','107','100','00002')
+;
+
+
+insert into Handles values
+('100','Warrior'),
+('104','Knight')
+;
+
+insert into DaysOffered values
+('5A7QR','13456','Monday'),
+('19B34','25522','Tuesday'),
+('2O4E2','14233','Wednesday'),
+('2O4E2','14233','Thursday'),
+('19B34','25522','Friday'),
+('2X3F4','55777','Saturday'),
+('2X3F4','55777','Sunday'),
+('19B34','25522','Monday')
+;
